@@ -2,6 +2,7 @@ package service;
 
 import dao.ClienteDAO;
 import dao.TransaccionDAO;
+import exception.CajeroException;
 import model.Cliente;
 import model.Transaccion;
 
@@ -16,25 +17,27 @@ public class ClienteService {
         this.transaccionDAO = transaccionDAO;
     }
 
-    public void registrarCliente(Cliente cliente) throws SQLException {
-        clienteDAO.crearCliente(cliente);
-    }
-
-    public Cliente login(String email, String password) throws SQLException {
+    public Cliente login(String email, String password) throws SQLException, CajeroException {
         Cliente cliente = clienteDAO.obtenerClientePorEmail(email);
         if (cliente != null && cliente.getPassword().equals(password)) {
             return cliente;
         }
-        return null;
+        throw new CajeroException("Email o contraseña incorrectos");
     }
 
-    public double revisarSaldo(int clienteId) throws SQLException {
+    public double revisarSaldo(int clienteId) throws SQLException, CajeroException {
         Cliente cliente = clienteDAO.obtenerClientePorId(clienteId);
+        if (cliente == null) {
+            throw new CajeroException("Cliente no encontrado");
+        }
         return cliente.getSaldo();
     }
 
-    public void depositar(int clienteId, double monto) throws SQLException {
+    public void depositar(int clienteId, double monto) throws SQLException, CajeroException {
         Cliente cliente = clienteDAO.obtenerClientePorId(clienteId);
+        if (cliente == null) {
+            throw new CajeroException("Cliente no encontrado");
+        }
         cliente.setSaldo(cliente.getSaldo() + monto);
         clienteDAO.actualizarSaldo(cliente);
 
@@ -45,8 +48,11 @@ public class ClienteService {
         transaccionDAO.registrarTransaccion(transaccion);
     }
 
-    public void retirar(int clienteId, double monto) throws SQLException {
+    public void retirar(int clienteId, double monto) throws SQLException, CajeroException {
         Cliente cliente = clienteDAO.obtenerClientePorId(clienteId);
+        if (cliente == null) {
+            throw new CajeroException("Cliente no encontrado");
+        }
         if (cliente.getSaldo() >= monto) {
             cliente.setSaldo(cliente.getSaldo() - monto);
             clienteDAO.actualizarSaldo(cliente);
@@ -57,13 +63,17 @@ public class ClienteService {
             transaccion.setMonto(monto);
             transaccionDAO.registrarTransaccion(transaccion);
         } else {
-            throw new SQLException("Saldo insuficiente");
+            throw new CajeroException("Saldo insuficiente");
         }
     }
 
-    public void transferir(int clienteOrigenId, int clienteDestinoId, double monto) throws SQLException {
+    public void transferir(int clienteOrigenId, int clienteDestinoId, double monto) throws SQLException, CajeroException {
         Cliente clienteOrigen = clienteDAO.obtenerClientePorId(clienteOrigenId);
         Cliente clienteDestino = clienteDAO.obtenerClientePorId(clienteDestinoId);
+
+        if (clienteOrigen == null || clienteDestino == null) {
+            throw new CajeroException("Cliente origen o destino no encontrado");
+        }
 
         if (clienteOrigen.getSaldo() >= monto) {
             clienteOrigen.setSaldo(clienteOrigen.getSaldo() - monto);
@@ -83,8 +93,7 @@ public class ClienteService {
             transaccionDestino.setMonto(monto);
             transaccionDAO.registrarTransaccion(transaccionDestino);
         } else {
-            throw new SQLException("Saldo insuficiente");
+            throw new CajeroException("Saldo insuficiente");
         }
     }
 }
-
