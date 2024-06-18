@@ -35,8 +35,8 @@ CREATE TABLE Empleados (
 
 -- Insertar datos de ejemplo en la tabla de clientes
 INSERT INTO Clientes (nombre, apellido, email, password, saldo) VALUES
-('Belen', 'Perez', 'belen.perez@gmail.com', '$2a$12$5Uz7bfhLCMsh6C4js5HO/uFbQdyNsjpuZZvTmtH9EpWct5RHtUTdK', 1000.00),
-('Miguel', 'Gomez', 'miguel.gomez@gmail.com', '$2a$12$5Uz7bfhLCMsh6C4js5HO/uFbQdyNsjpuZZvTmtH9EpWct5RHtUTdK', 1500.00);
+('Belen', 'Perez', 'belen.perez@gmail.com', 'user123', 1000.00),
+('Miguel', 'Gomez', 'miguel.gomez@gmail.com', 'user123', 1500.00);
 
 -- Insertar datos de ejemplo en la tabla de transacciones
 INSERT INTO Transacciones (cliente_id, tipo, monto) VALUES
@@ -46,5 +46,5 @@ INSERT INTO Transacciones (cliente_id, tipo, monto) VALUES
 
 -- Insertar datos de ejemplo en la tabla de empleados
 INSERT INTO Empleados (nombre, apellido, email, password) VALUES
-('Tomas', 'Friz', 'tomas.friz@gmail.com', '$2a$12$5Uz7bfhLCMsh6C4js5HO/uFbQdyNsjpuZZvTmtH9EpWct5RHtUTdK'),
-('Gabriela', 'Diaz', 'gabriela.diaz@gmail.com', '$2a$12$5Uz7bfhLCMsh6C4js5HO/uFbQdyNsjpuZZvTmtH9EpWct5RHtUTdK');
+('Tomas', 'Friz', 'tomas.friz@gmail.com', 'admin123'),
+('Gabriela', 'Diaz', 'gabriela.diaz@gmail.com', 'admin123');
