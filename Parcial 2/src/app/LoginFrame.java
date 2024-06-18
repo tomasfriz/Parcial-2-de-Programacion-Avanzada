@@ -55,6 +55,7 @@ public class LoginFrame extends JFrame {
                     handleLogin((String) userTypeComboBox.getSelectedItem());
                 } catch (SQLException | CajeroException ex) {
                     JOptionPane.showMessageDialog(LoginFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    limpiarCampos();
                 }
             }
         });
@@ -82,7 +83,7 @@ public class LoginFrame extends JFrame {
                 clienteFrame.setVisible(true);
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Cliente no encontrado. Por favor, verifique sus credenciales.", "Error", JOptionPane.ERROR_MESSAGE);
+                throw new CajeroException("Email o contraseña incorrectos");
             }
         } else if (userType.equals("Empleado")) {
             Empleado empleado = empleadoService.login(email, password);
@@ -91,8 +92,13 @@ public class LoginFrame extends JFrame {
                 empleadoFrame.setVisible(true);
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Empleado no encontrado. Por favor, verifique sus credenciales.", "Error", JOptionPane.ERROR_MESSAGE);
+                throw new CajeroException("Email o contraseña incorrectos");
             }
         }
+    }
+
+    private void limpiarCampos() {
+        emailField.setText("");
+        passwordField.setText("");
     }
 }
