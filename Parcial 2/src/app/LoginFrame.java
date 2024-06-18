@@ -8,6 +8,7 @@ import service.EmpleadoService;
 import dao.ClienteDAO;
 import dao.EmpleadoDAO;
 import dao.TransaccionDAO;
+import dao.EstadoCajeroDAO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,8 +31,10 @@ public class LoginFrame extends JFrame {
         ClienteDAO clienteDAO = new ClienteDAO();
         EmpleadoDAO empleadoDAO = new EmpleadoDAO();
         TransaccionDAO transaccionDAO = new TransaccionDAO();
+        EstadoCajeroDAO estadoCajeroDAO = new EstadoCajeroDAO();
+
         clienteService = new ClienteService(clienteDAO, transaccionDAO);
-        empleadoService = new EmpleadoService(empleadoDAO, transaccionDAO);
+        empleadoService = new EmpleadoService(empleadoDAO, transaccionDAO, estadoCajeroDAO);
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 2));
@@ -74,14 +77,22 @@ public class LoginFrame extends JFrame {
 
         if (userType.equals("Cliente")) {
             Cliente cliente = clienteService.login(email, password);
-            ClienteFrame clienteFrame = new ClienteFrame(cliente, clienteService);
-            clienteFrame.setVisible(true);
-            dispose();
+            if (cliente != null) {
+                ClienteFrame clienteFrame = new ClienteFrame(cliente, clienteService);
+                clienteFrame.setVisible(true);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Cliente no encontrado. Por favor, verifique sus credenciales.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         } else if (userType.equals("Empleado")) {
             Empleado empleado = empleadoService.login(email, password);
-            EmpleadoFrame empleadoFrame = new EmpleadoFrame(empleado, empleadoService);
-            empleadoFrame.setVisible(true);
-            dispose();
+            if (empleado != null) {
+                EmpleadoFrame empleadoFrame = new EmpleadoFrame(empleado, empleadoService);
+                empleadoFrame.setVisible(true);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Empleado no encontrado. Por favor, verifique sus credenciales.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 }
