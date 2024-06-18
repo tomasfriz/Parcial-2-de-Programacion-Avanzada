@@ -20,6 +20,8 @@ public class ClienteDAO {
             statement.setString(4, cliente.getPassword());
             statement.setDouble(5, cliente.getSaldo());
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error al crear el cliente", e);
         }
     }
 
@@ -40,6 +42,8 @@ public class ClienteDAO {
                     return cliente;
                 }
             }
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener el cliente por email", e);
         }
         return null;
     }
@@ -61,6 +65,8 @@ public class ClienteDAO {
                     return cliente;
                 }
             }
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener el cliente por ID", e);
         }
         return null;
     }
@@ -72,6 +78,8 @@ public class ClienteDAO {
             statement.setDouble(1, cliente.getSaldo());
             statement.setInt(2, cliente.getId());
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error al actualizar el saldo del cliente", e);
         }
     }
 }

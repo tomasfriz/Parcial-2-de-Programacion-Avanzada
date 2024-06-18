@@ -5,7 +5,10 @@ import util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransaccionDAO {
 
@@ -17,6 +20,29 @@ public class TransaccionDAO {
             statement.setString(2, transaccion.getTipo());
             statement.setDouble(3, transaccion.getMonto());
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error al registrar la transacción", e);
         }
+    }
+
+    public List<Transaccion> obtenerTodasLasTransacciones() throws SQLException {
+        String sql = "SELECT * FROM Transacciones";
+        List<Transaccion> transacciones = new ArrayList<>();
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                Transaccion transaccion = new Transaccion();
+                transaccion.setId(resultSet.getInt("id"));
+                transaccion.setClienteId(resultSet.getInt("cliente_id"));
+                transaccion.setTipo(resultSet.getString("tipo"));
+                transaccion.setMonto(resultSet.getDouble("monto"));
+                transaccion.setFecha(resultSet.getTimestamp("fecha"));
+                transacciones.add(transaccion);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener todas las transacciones", e);
+        }
+        return transacciones;
     }
 }
