@@ -33,6 +33,12 @@ CREATE TABLE Empleados (
     password VARCHAR(256)
 );
 
+-- Crear tabla para almacenar el estado del cajero automático
+CREATE TABLE EstadoCajero (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cantidad_dinero DECIMAL(10, 2) NOT NULL
+);
+
 -- Insertar datos de ejemplo en la tabla de clientes
 INSERT INTO Clientes (nombre, apellido, email, password, saldo) VALUES
 ('Belen', 'Perez', 'belen.perez@gmail.com', 'user123', 1000.00),
@@ -48,3 +54,6 @@ INSERT INTO Transacciones (cliente_id, tipo, monto) VALUES
 INSERT INTO Empleados (nombre, apellido, email, password) VALUES
 ('Tomas', 'Friz', 'tomas.friz@gmail.com', 'admin123'),
 ('Gabriela', 'Diaz', 'gabriela.diaz@gmail.com', 'admin123');
+
+-- Insertar un registro inicial en la tabla EstadoCajero
+INSERT INTO EstadoCajero (cantidad_dinero) VALUES (10000.00);
