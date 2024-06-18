@@ -7,6 +7,7 @@ import model.Cliente;
 import model.Transaccion;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class ClienteService {
     private ClienteDAO clienteDAO;
@@ -17,26 +18,30 @@ public class ClienteService {
         this.transaccionDAO = transaccionDAO;
     }
 
-    public Cliente login(String email, String password) throws SQLException, CajeroException {
-        Cliente cliente = clienteDAO.obtenerClientePorEmail(email);
-        if (cliente != null && cliente.getPassword().equals(password)) {
-            return cliente;
-        }
-        throw new CajeroException("Email o contraseña incorrectos");
-    }
-
-    public double revisarSaldo(int clienteId) throws SQLException, CajeroException {
+    public double obtenerSaldo(int clienteId) throws SQLException {
         Cliente cliente = clienteDAO.obtenerClientePorId(clienteId);
         if (cliente == null) {
-            throw new CajeroException("Cliente no encontrado");
+            throw new SQLException("Cliente no encontrado");
         }
         return cliente.getSaldo();
     }
 
-    public void depositar(int clienteId, double monto) throws SQLException, CajeroException {
+    public List<Transaccion> obtenerMovimientos(int clienteId) throws SQLException {
+        return transaccionDAO.obtenerMovimientosPorCliente(clienteId);
+    }
+
+    public Cliente login(String email, String password) throws SQLException, CajeroException {
+        Cliente cliente = clienteDAO.obtenerClientePorEmail(email, password);
+        if (cliente == null) {
+            throw new CajeroException("Email o contraseña incorrectos");
+        }
+        return cliente;
+    }
+
+    public void depositar(int clienteId, double monto) throws SQLException {
         Cliente cliente = clienteDAO.obtenerClientePorId(clienteId);
         if (cliente == null) {
-            throw new CajeroException("Cliente no encontrado");
+            throw new SQLException("Cliente no encontrado");
         }
         cliente.setSaldo(cliente.getSaldo() + monto);
         clienteDAO.actualizarSaldo(cliente);
@@ -51,7 +56,7 @@ public class ClienteService {
     public void retirar(int clienteId, double monto) throws SQLException, CajeroException {
         Cliente cliente = clienteDAO.obtenerClientePorId(clienteId);
         if (cliente == null) {
-            throw new CajeroException("Cliente no encontrado");
+            throw new SQLException("Cliente no encontrado");
         }
         if (cliente.getSaldo() >= monto) {
             cliente.setSaldo(cliente.getSaldo() - monto);
