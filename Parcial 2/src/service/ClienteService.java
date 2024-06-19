@@ -72,12 +72,14 @@ public class ClienteService {
         }
     }
 
-    public void transferir(int clienteOrigenId, int clienteDestinoId, double monto) throws SQLException, CajeroException {
+    public void transferir(int clienteOrigenId, String emailDestino, double monto) throws SQLException, CajeroException {
         Cliente clienteOrigen = clienteDAO.obtenerClientePorId(clienteOrigenId);
-        Cliente clienteDestino = clienteDAO.obtenerClientePorId(clienteDestinoId);
-
-        if (clienteOrigen == null || clienteDestino == null) {
-            throw new CajeroException("Cliente origen o destino no encontrado");
+        Cliente clienteDestino = clienteDAO.obtenerClientePorEmail(emailDestino);
+        if (clienteOrigen == null) {
+            throw new SQLException("Cliente origen no encontrado");
+        }
+        if (clienteDestino == null) {
+            throw new SQLException("Cliente destino no encontrado");
         }
 
         if (clienteOrigen.getSaldo() >= monto) {
@@ -93,7 +95,7 @@ public class ClienteService {
             transaccionDAO.registrarTransaccion(transaccionOrigen);
 
             Transaccion transaccionDestino = new Transaccion();
-            transaccionDestino.setClienteId(clienteDestinoId);
+            transaccionDestino.setClienteId(clienteDestino.getId());
             transaccionDestino.setTipo("Transferencia Recibida");
             transaccionDestino.setMonto(monto);
             transaccionDAO.registrarTransaccion(transaccionDestino);

@@ -4,11 +4,13 @@ import dao.InMemoryClienteDAO;
 import dao.InMemoryTransaccionDAO;
 import exception.CajeroException;
 import model.Cliente;
+import model.Transaccion;
 import org.junit.Before;
 import org.junit.Test;
 import service.ClienteService;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -76,7 +78,7 @@ public class ClienteServiceTest {
         Cliente clienteOrigen = clienteDAO.obtenerClientePorId(1);
         Cliente clienteDestino = clienteDAO.obtenerClientePorId(2);
 
-        clienteService.transferir(1, 2, 500);
+        clienteService.transferir(1, "dimitri.vegas@gmail.com", 500);
 
         assertEquals(500, clienteOrigen.getSaldo(), 0);
         assertEquals(1000, clienteDestino.getSaldo(), 0);
@@ -88,7 +90,7 @@ public class ClienteServiceTest {
         Cliente clienteDestino = clienteDAO.obtenerClientePorId(2);
 
         CajeroException thrown = assertThrows(CajeroException.class, () -> {
-            clienteService.transferir(1, 2, 1500);
+            clienteService.transferir(1, "dimitri.vegas@gmail.com", 1500);
         });
 
         assertEquals("Saldo insuficiente", thrown.getMessage());

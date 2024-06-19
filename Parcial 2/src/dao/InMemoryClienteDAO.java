@@ -18,6 +18,14 @@ public class InMemoryClienteDAO extends ClienteDAO {
     }
 
     @Override
+    public Cliente obtenerClientePorEmail(String email) {
+        return clientes.values().stream()
+                .filter(cliente -> cliente.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
     public Cliente obtenerClientePorId(int id) {
         return clientes.get(id);
     }

@@ -59,7 +59,7 @@ public class EmpleadoFrame extends JFrame {
     private void actualizarCantidadDineroLabel() {
         try {
             double cantidadDinero = empleadoService.obtenerCantidadDinero();
-            cantidadDineroLabel.setText("Cantidad de Dinero en el Cajero: " + cantidadDinero);
+            cantidadDineroLabel.setText("Cantidad de Dinero en el Cajero: $" + cantidadDinero);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al obtener la cantidad de dinero del cajero", "Error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();

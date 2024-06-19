@@ -31,6 +31,26 @@ public class ClienteDAO {
         return null;
     }
 
+    public Cliente obtenerClientePorEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM Clientes WHERE email = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setId(resultSet.getInt("id"));
+                cliente.setNombre(resultSet.getString("nombre"));
+                cliente.setApellido(resultSet.getString("apellido"));
+                cliente.setEmail(resultSet.getString("email"));
+                cliente.setPassword(resultSet.getString("password"));
+                cliente.setSaldo(resultSet.getDouble("saldo"));
+                return cliente;
+            }
+        }
+        return null;
+    }
+
     public Cliente obtenerClientePorId(int id) throws SQLException {
         String sql = "SELECT * FROM Clientes WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();

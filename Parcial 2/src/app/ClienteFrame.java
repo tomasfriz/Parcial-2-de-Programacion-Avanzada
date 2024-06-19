@@ -72,7 +72,7 @@ public class ClienteFrame extends JFrame {
     private void actualizarSaldoLabel() {
         try {
             double saldo = clienteService.obtenerSaldo(cliente.getId());
-            saldoLabel.setText("Saldo actual: " + saldo);
+            saldoLabel.setText("Saldo actual: $" + saldo);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al obtener el saldo del cliente", "Error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -135,9 +135,8 @@ public class ClienteFrame extends JFrame {
         String montoStr = JOptionPane.showInputDialog(this, "Ingrese el monto a transferir:");
         if (emailDestino != null && montoStr != null) {
             try {
-                Cliente destinatario = clienteService.login(emailDestino, ""); // Solo para obtener el cliente por email
                 double monto = Double.parseDouble(montoStr);
-                clienteService.transferir(cliente.getId(), destinatario.getId(), monto);
+                clienteService.transferir(cliente.getId(), emailDestino, monto);
                 actualizarSaldoLabel();
                 JOptionPane.showMessageDialog(this, "Transferencia realizada exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } catch (SQLException | CajeroException ex) {
