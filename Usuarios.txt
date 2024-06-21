@@ -1,0 +1,15 @@
+-- Clientes:
+
+- usuario 1: belen.perez@gmail.com 
+- cont: user123
+
+- usuario 2: miguel.gomez@gmail.com
+- cont: user123
+
+-- Empleados:
+
+- usuario 1: tomas.friz@gmail.com
+- cont: admin123
+
+- usuario 2: gabriela.diaz@gmail.com
+- cont: admin123
